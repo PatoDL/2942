@@ -59,8 +59,8 @@ public class LoaderManager : MonoBehaviour
             if (loadingProgress >= 1)
             {
                 ao.allowSceneActivation = true;
-                if(scene=="GameOver" || SceneManager.GetActiveScene().name=="GameOver")
-                    GameManager.Instance.changing = false;
+                if(SceneManager.GetActiveScene().name=="GameOver")
+                    GameManager.Instance.changingScene = false;
             }
 
             yield return null;

@@ -32,7 +32,7 @@ public class UILoadingScreen : MonoBehaviour
 
     public void Update()
     {
-        int loadingVal = (int)(LoaderManager.Instance.loadingProgress * 100);
+        int loadingVal = (int)(LoaderManager.Instance.loadingProgress * 1000);
         loadingText.text = loadingVal + "%";
         if (LoaderManager.Instance.loadingProgress >= 1)
             SetVisible(false);

@@ -9,12 +9,10 @@ public class GameManager : MonoBehaviour
     public int score;
     int timer = 0;
     GameObject canvas;
-    Text livesText;
     Text scoreText;
-    public bool gameOver = false;
-   
-
-    public bool changing = false;
+    bool gameOver = false;
+    public GameObject player;
+    public bool changingScene = false;
 
     private static GameManager instance;
     public static GameManager Instance
@@ -31,6 +29,16 @@ public class GameManager : MonoBehaviour
         }
         instance = this;
         DontDestroyOnLoad(gameObject);
+    }
+
+    public void setGameOver(bool g)
+    {
+        gameOver = g;
+        if (gameOver)
+        {
+            UILoadingScreen.Instance.SetVisible(true);
+            LoaderManager.Instance.LoadScene("GameOver");
+        }
     }
 
     void Init()

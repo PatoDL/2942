@@ -11,13 +11,13 @@ public class ShipController : MonoBehaviour
     public Text bombAmountText;
 
     public GameObject energyBarImage;
-    float barModifier = 1f;
+    float energy = 1f;
 
     // Start is called before the first frame update
     void Start()
     {
         bombAmountText.text = bombAmount.ToString();
-        energyBarImage.transform.localScale = new Vector3(barModifier, energyBarImage.transform.localScale.y, 0);
+        energyBarImage.transform.localScale = new Vector3(energy, energyBarImage.transform.localScale.y, 0);
     }
 
     // Update is called once per frame
@@ -44,9 +44,9 @@ public class ShipController : MonoBehaviour
             bombAmount--;
             bombAmountText.text = bombAmount.ToString();
         }
-        if(barModifier<=0f)
+        if(energy<=0f && !GameManager.Instance.changingScene)
         {
-            Destroy(gameObject);
+            GameManager.Instance.setGameOver(true);
         }
     }
 
@@ -81,8 +81,8 @@ public class ShipController : MonoBehaviour
     {
         if(col.gameObject.name == "CommonEnemy")
         {
-            barModifier -= 0.1f;
-            energyBarImage.transform.localScale = new Vector3(barModifier, energyBarImage.transform.localScale.y, 0);
+            energy -= 0.1f;
+            energyBarImage.transform.localScale = new Vector3(energy, energyBarImage.transform.localScale.y, 0);
         }
     }
 }
