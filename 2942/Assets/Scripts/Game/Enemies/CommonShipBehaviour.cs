@@ -8,6 +8,9 @@ public class CommonShipBehaviour : MonoBehaviour
     float speed = 5f;
     bool switchSpeedLine = false;
     public GameObject flame;
+    public float hasItem = 0;
+
+    public GameObject item;
     // Start is called before the first frame update
     void Start()
     {
@@ -70,6 +73,11 @@ public class CommonShipBehaviour : MonoBehaviour
     {
         GameObject f = Instantiate(flame);
         f.transform.position = transform.position;
+        if (hasItem > 0)
+        {
+            GameObject i = Instantiate(item);
+            i.transform.position = transform.position;
+        }
         Destroy(gameObject);
     }
 }

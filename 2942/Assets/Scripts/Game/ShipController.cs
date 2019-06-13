@@ -10,6 +10,7 @@ public class ShipController : MonoBehaviour
     public GameObject fireball;
 
     bool shootPowerUp = false;
+    float shootPowerUpTimer = 0f;
 
     public GameObject energyBarImage;
     float energy = 1f;
@@ -33,6 +34,15 @@ public class ShipController : MonoBehaviour
         if(energy<=0f && !GameManager.Instance.changingScene)
         {
             GameManager.Instance.setGameOver(true);
+        }
+        if(shootPowerUp)
+        {
+            shootPowerUpTimer += Time.deltaTime;
+        }
+        if(shootPowerUpTimer>10f)
+        {
+            shootPowerUp = false;
+            shootPowerUpTimer = 0f;
         }
     }
 
@@ -70,12 +80,27 @@ public class ShipController : MonoBehaviour
             energy -= 0.1f;
             energyBarImage.transform.localScale = new Vector3(energy, energyBarImage.transform.localScale.y, 0);
         }
+        if(col.gameObject.name=="Item")
+        {
+            switch(col.gameObject.GetComponent<ItemBehaviour>().itemType)
+            {
+                case ItemBehaviour.ItemType.energy:
+                    if (energy < 1f)
+                    {
+                        energy += 0.1f;
+                        energyBarImage.transform.localScale = new Vector3(energy, energyBarImage.transform.localScale.y, 0);
+                    }
+                    break;
+                case ItemBehaviour.ItemType.shootBoost:
+                    shootPowerUp = true;
+                    break;
+            }
+            Destroy(col.gameObject);
+        }
     }
 
     void InputCheck()
     {
-        if (Input.GetKeyUp(KeyCode.Q))
-            LoaderManager.Instance.LoadScene("Level2");
         if (Input.GetKey(KeyCode.Z) || Input.GetKeyDown(KeyCode.Z))
         {
             if (shootPowerUp)

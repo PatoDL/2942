@@ -10,6 +10,9 @@ public class GroupEnemyBehaviour : MonoBehaviour
     float xSpeed = 5f;
     public float xSetted = 1.5f;
     public GameObject flame;
+    public float hasItem = 0;
+
+    public GameObject item;
     // Start is called before the first frame update
     void Start()
     {
@@ -35,6 +38,11 @@ public class GroupEnemyBehaviour : MonoBehaviour
     {
         GameObject f = Instantiate(flame);
         f.transform.position = transform.position;
+        if(hasItem>0)
+        {
+            GameObject i = Instantiate(item);
+            i.transform.position = transform.position;
+        }
         Destroy(gameObject);
     }
 }

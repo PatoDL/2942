@@ -28,6 +28,7 @@ public class EnemyGenerator : MonoBehaviour
         if (commonEnemyTimer > 2.5f)
         {
             GameObject cs = Instantiate(commonShip);
+            cs.GetComponent<CommonShipBehaviour>().hasItem = Random.Range(0f, 1f);
             enemies.Add(cs);
             commonEnemyTimer = 0f;
         }
@@ -44,6 +45,7 @@ public class EnemyGenerator : MonoBehaviour
         if(groupEnemyTimer> groupEnemiesSpawnRatio && amountOfEnemiesToSpawn>0)
         {
             GameObject ge = Instantiate(groupEnemy);
+            ge.GetComponent<GroupEnemyBehaviour>().hasItem = Random.Range(0f, 1f);
             if (changeGroupStartPos)
             {
                 groupXPos = 1.5f;
