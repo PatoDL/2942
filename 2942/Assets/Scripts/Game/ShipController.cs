@@ -92,7 +92,12 @@ public class ShipController : MonoBehaviour
                     }
                     break;
                 case ItemBehaviour.ItemType.shootBoost:
-                    shootPowerUp = true;
+                    if (shootPowerUp)
+                    {
+                        shootPowerUpTimer = 0f;
+                    }
+                    else
+                        shootPowerUp = true;
                     break;
             }
             Destroy(col.gameObject);

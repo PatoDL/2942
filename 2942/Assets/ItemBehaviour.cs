@@ -20,6 +20,7 @@ public class ItemBehaviour : MonoBehaviour
         name = "Item";
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
         itemType = (ItemType)Random.Range(0, 2);
+        Vector2 collsize = GetComponent<BoxCollider2D>().size;
         switch (itemType)
         {
             case ItemType.energy:
@@ -29,6 +30,7 @@ public class ItemBehaviour : MonoBehaviour
             case ItemType.shootBoost:
                 sr.sprite = shootSprite;
                 sr.transform.localScale *= 5;
+                GetComponent<BoxCollider2D>().size = collsize/25;
                 break;
         }
     }
