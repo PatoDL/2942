@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7221611465402873746}
   - component: {fileID: 4674792230898846519}
   - component: {fileID: 6203923789085059469}
+  - component: {fileID: 1625690346090997442}
   m_Layer: 0
   m_Name: enemy_ship1
   m_TagString: Untagged
@@ -95,6 +96,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flame: {fileID: 3496393777570386898, guid: 36c32a377671d1240a819a2ee46221d8, type: 3}
   hasItem: 0
+  a: {fileID: 0}
   item: {fileID: 8427864735633471460, guid: 76bcddd7a85b0af45b5650174081ae41, type: 3}
 --- !u!61 &6203923789085059469
 BoxCollider2D:
@@ -122,3 +124,22 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.85, y: 0.63}
   m_EdgeRadius: 0
+--- !u!95 &1625690346090997442
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5526117278539704882}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 68af6171242b4bd48b704644b3eecae4, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

@@ -23,7 +23,7 @@ public class FireballBehaviour : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D col)
     {
-        if(col.gameObject.name == "CommonEnemy")
+        if(col.gameObject.name == "enemy_ship1")
         {
             col.gameObject.GetComponent<CommonShipBehaviour>().Death();
         }

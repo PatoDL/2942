@@ -15,6 +15,9 @@ public class ShipController : MonoBehaviour
     public GameObject energyBarImage;
     float energy = 1f;
 
+    float shootTimer = 0f;
+    float shootRateTime = 0.1f;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -29,6 +32,7 @@ public class ShipController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        shootTimer += Time.deltaTime;
         Move();
         InputCheck();
         if(energy<=0f && !GameManager.Instance.changingScene)
@@ -106,19 +110,23 @@ public class ShipController : MonoBehaviour
 
     void InputCheck()
     {
-        if (Input.GetKey(KeyCode.Z) || Input.GetKeyDown(KeyCode.Z))
+        if (Input.GetKey(KeyCode.Z) /*|| Input.GetKeyDown(KeyCode.Z)*/)
         {
-            if (shootPowerUp)
+            if (shootTimer > shootRateTime)
             {
-                GameObject fb = Instantiate(fireball);
-                fb.transform.position = transform.position + Vector3.right / 2;
-                GameObject fb2 = Instantiate(fireball);
-                fb2.transform.position = transform.position + Vector3.left / 2;
-            }
-            else
-            {
-                GameObject fb = Instantiate(fireball);
-                fb.transform.position = transform.position;
+                if (shootPowerUp)
+                {
+                    GameObject fb = Instantiate(fireball);
+                    fb.transform.position = transform.position + Vector3.right / 2;
+                    GameObject fb2 = Instantiate(fireball);
+                    fb2.transform.position = transform.position + Vector3.left / 2;
+                }
+                else
+                {
+                    GameObject fb = Instantiate(fireball);
+                    fb.transform.position = transform.position;
+                }
+                shootTimer = 0f;
             }
         }
         if (Input.GetKeyUp(KeyCode.Space) && bombAmount > 0)

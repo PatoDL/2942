@@ -9,6 +9,7 @@ public class CommonShipBehaviour : MonoBehaviour
     bool switchSpeedLine = false;
     public GameObject flame;
     public float hasItem = 0;
+    Animator a;
 
     public GameObject item;
     // Start is called before the first frame update
@@ -16,8 +17,9 @@ public class CommonShipBehaviour : MonoBehaviour
     {
         transform.position = new Vector3(Random.Range(CameraUtils.OrthographicBounds().min.x, CameraUtils.OrthographicBounds().max.x),
             CameraUtils.OrthographicBounds().max.y + 7f);
-        name = "CommonEnemy";
+        name = "enemy_ship1";
         player = GameObject.Find("Ship");
+        a = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -71,8 +73,9 @@ public class CommonShipBehaviour : MonoBehaviour
 
     public void Death()
     {
-        GameObject f = Instantiate(flame);
-        f.transform.position = transform.position;
+        //GameObject f = Instantiate(flame);
+        //f.transform.position = transform.position;
+        a.SetBool("Death", true);
         if (hasItem > 0)
         {
             GameObject i = Instantiate(item);
