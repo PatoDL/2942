@@ -26,7 +26,11 @@ public class FireballBehaviour : MonoBehaviour
         if(col.gameObject.name == "CommonEnemy")
         {
             col.gameObject.GetComponent<CommonShipBehaviour>().Death();
-            Destroy(gameObject);
         }
+        else if(col.gameObject.name == "GroupEnemy")
+        {
+            col.gameObject.GetComponent<GroupEnemyBehaviour>().Death();
+        }
+        Destroy(gameObject);
     }
 }

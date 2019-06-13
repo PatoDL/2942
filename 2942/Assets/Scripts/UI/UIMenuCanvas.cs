@@ -28,7 +28,7 @@ public class UIMenuCanvas : MonoBehaviour
 
     public void PlayGame()
     {
-        LoaderManager.Instance.LoadScene("Game");
+        LoaderManager.Instance.LoadScene("Level1");
         UILoadingScreen.Instance.SetVisible(true);
     }
 

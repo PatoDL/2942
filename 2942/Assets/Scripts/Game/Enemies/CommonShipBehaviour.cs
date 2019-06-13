@@ -20,33 +20,43 @@ public class CommonShipBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!switchSpeedLine)
-        {
-            AdjustPositionToPlayer(Vector3.down * speed);
-            switchSpeedLine = transform.position.y < CameraUtils.OrthographicBounds().max.y - 2.5f;
-            if (switchSpeedLine)
-            {
-                speed /= 2;
-            }
-        }
-        else if(switchSpeedLine)
-        {
-            if (player.transform.position.x > transform.position.x)
-            {
-                AdjustPositionToPlayer(Vector3.right);
-            }
-            else if (player.transform.position.x < transform.position.x)
-            {
-                AdjustPositionToPlayer(Vector3.left);
-            }
+        float trueSpeed = speed * Time.deltaTime;
 
-            if (player.transform.position.y > transform.position.y)
-            {
-                AdjustPositionToPlayer(Vector3.up * speed);
-            }
-            else if (player.transform.position.y < transform.position.y)
+        bool samePosAsPlayer = (transform.position.x >= player.transform.position.x - trueSpeed &&
+                                transform.position.x <= player.transform.position.x + trueSpeed) &&
+                                (transform.position.y >= player.transform.position.y - trueSpeed &&
+                                transform.position.y <= player.transform.position.y + trueSpeed);
+
+        if (!samePosAsPlayer)
+        {
+            if (!switchSpeedLine)
             {
                 AdjustPositionToPlayer(Vector3.down * speed);
+                switchSpeedLine = transform.position.y < CameraUtils.OrthographicBounds().max.y - 2.5f;
+                if (switchSpeedLine)
+                {
+                    speed /= 2;
+                }
+            }
+            else if (switchSpeedLine)
+            {
+                if (player.transform.position.x > transform.position.x)
+                {
+                    AdjustPositionToPlayer(Vector3.right);
+                }
+                else if (player.transform.position.x < transform.position.x)
+                {
+                    AdjustPositionToPlayer(Vector3.left);
+                }
+
+                if (player.transform.position.y > transform.position.y)
+                {
+                    AdjustPositionToPlayer(Vector3.up * speed);
+                }
+                else if (player.transform.position.y < transform.position.y)
+                {
+                    AdjustPositionToPlayer(Vector3.down * speed);
+                }
             }
         }
     }
@@ -60,7 +70,6 @@ public class CommonShipBehaviour : MonoBehaviour
     {
         GameObject f = Instantiate(flame);
         f.transform.position = transform.position;
-     //   EnemyGenerator.enemies.Remove(gameObject);
         Destroy(gameObject);
     }
 }

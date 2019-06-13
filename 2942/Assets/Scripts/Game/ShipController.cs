@@ -8,49 +8,35 @@ public class ShipController : MonoBehaviour
     float speed = 5f;
     public int bombAmount = 3;
     public GameObject fireball;
-    public Text bombAmountText;
+
+    bool shootPowerUp = false;
 
     public GameObject energyBarImage;
     float energy = 1f;
 
     // Start is called before the first frame update
+    void Awake()
+    {
+        energy = 1f;
+    }
+
     void Start()
     {
-        bombAmountText.text = bombAmount.ToString();
         energyBarImage.transform.localScale = new Vector3(energy, energyBarImage.transform.localScale.y, 0);
     }
 
     // Update is called once per frame
     void Update()
     {
-        move();
-        if(Input.GetKeyUp(KeyCode.Z))
-        {
-            GameObject fb = Instantiate(fireball);
-            fb.transform.position = transform.position;
-        }
-        if(Input.GetKeyUp(KeyCode.Space) && bombAmount>0)
-        {
-            foreach(GameObject e in EnemyGenerator.enemies)
-            {
-                if (e.gameObject != null)
-                {
-                    if (e.transform.position.y < CameraUtils.OrthographicBounds().max.y)
-                    {
-                        e.GetComponent<CommonShipBehaviour>().Death();
-                    }
-                }
-            }
-            bombAmount--;
-            bombAmountText.text = bombAmount.ToString();
-        }
+        Move();
+        InputCheck();
         if(energy<=0f && !GameManager.Instance.changingScene)
         {
             GameManager.Instance.setGameOver(true);
         }
     }
 
-    void move()
+    void Move()
     {
         float hor = Input.GetAxisRaw("Horizontal");
         float ver = Input.GetAxisRaw("Vertical");
@@ -83,6 +69,44 @@ public class ShipController : MonoBehaviour
         {
             energy -= 0.1f;
             energyBarImage.transform.localScale = new Vector3(energy, energyBarImage.transform.localScale.y, 0);
+        }
+    }
+
+    void InputCheck()
+    {
+        if (Input.GetKeyUp(KeyCode.Q))
+            LoaderManager.Instance.LoadScene("Level2");
+        if (Input.GetKey(KeyCode.Z) || Input.GetKeyDown(KeyCode.Z))
+        {
+            if (shootPowerUp)
+            {
+                GameObject fb = Instantiate(fireball);
+                fb.transform.position = transform.position + Vector3.right / 2;
+                GameObject fb2 = Instantiate(fireball);
+                fb2.transform.position = transform.position + Vector3.left / 2;
+            }
+            else
+            {
+                GameObject fb = Instantiate(fireball);
+                fb.transform.position = transform.position;
+            }
+        }
+        if (Input.GetKeyUp(KeyCode.Space) && bombAmount > 0)
+        {
+            foreach (GameObject e in EnemyGenerator.enemies)
+            {
+                if (e.gameObject != null)
+                {
+                    if (e.transform.position.y < CameraUtils.OrthographicBounds().max.y)
+                    {
+                        if (e.name == "CommonEnemy")
+                            e.GetComponent<CommonShipBehaviour>().Death();
+                        else if (e.name == "GroupEnemy")
+                            e.GetComponent<GroupEnemyBehaviour>().Death();
+                    }
+                }
+            }
+            bombAmount--;
         }
     }
 }

@@ -7,8 +7,8 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public int score;
-    int timer = 0;
     GameObject canvas;
+    float levelTimer = 0f;
     Text scoreText;
     bool gameOver = false;
     public GameObject player;
@@ -31,22 +31,39 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    void Update()
+    {
+        if (SceneManager.GetActiveScene().name == "Level1" || SceneManager.GetActiveScene().name == "Level2")
+        {
+            levelTimer += Time.deltaTime;
+            if (levelTimer >= 120f)
+            {
+                levelTimer = 0f;
+                if (SceneManager.GetActiveScene().name == "Level1")
+                    LoaderManager.Instance.LoadScene("Level2");
+                else
+                    SceneManager.LoadScene("GameOver");
+            }
+        }
+
+        if (UIGameOverCanvas.playAgain)
+        {
+            UIGameOverCanvas.playAgain = false;
+            SceneManager.LoadScene("Level1");
+        }
+    }
+
     public void setGameOver(bool g)
     {
         gameOver = g;
         if (gameOver)
         {
-            UILoadingScreen.Instance.SetVisible(true);
-            LoaderManager.Instance.LoadScene("GameOver");
+            gameOver = false;
+            SceneManager.LoadScene("GameOver");
         }
     }
 
     void Init()
-    {
-        
-    }
-
-    void Update()
     {
         
     }
