@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class FlameBehaviour : MonoBehaviour
 {
-    float timeForDisappear = 0f;
-    // Update is called once per frame
+    float timeForDisappear = 0.75f;
+    float duration = 0f;
+
     void Update()
     {
-        timeForDisappear += Time.deltaTime;
-        if(timeForDisappear>0.75f)
+        duration += Time.deltaTime;
+        if(duration>timeForDisappear)
         {
             Destroy(gameObject);
         }

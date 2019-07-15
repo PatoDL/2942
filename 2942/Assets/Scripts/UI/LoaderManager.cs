@@ -1,69 +1,102 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class LoaderManager : MonoBehaviour
+
+public class LoaderManager : MonoBehaviourSingleton<LoaderManager>
 {
     public float loadingProgress;
+    public bool fakeLoad;
     public float timeLoading;
     public float minTimeToLoad = 2;
-    private static LoaderManager instance;
-
-    private void Awake()
+    public UILoadingScreen uiLoadingScreen;
+    
+    void FakeLoad()
     {
-        Init();
+        uiLoadingScreen.SetVisible(true);
+        StartCoroutine(AsynchronousFakeLoad());
     }
-
-    public static LoaderManager Instance
+    
+    public void LoadScene(int scene)
     {
-        get { return instance; }
-    }
-
-    public void Init()
-    {
-        if (instance != null)
+        if (fakeLoad)
         {
-            Destroy(this);
-            return;
+            StartCoroutine(AsynchronousLoadWithFake(scene));
         }
-        instance = this;
-        DontDestroyOnLoad(gameObject);
+        else
+        {
+            StartCoroutine(AsynchronousLoad(scene));
+        }
     }
-
-    public static void Create()
+    
+    public IEnumerator AsynchronousFakeLoad()
     {
-        instance = new LoaderManager();
+        loadingProgress = 0;
+    
+        yield return null;
+    
+        while (loadingProgress < 1)
+        {
+    
+            loadingProgress += 0.01f;
+    
+            if (loadingProgress >= 1)
+            {
+                loadingProgress = 1;
+            }
+    
+    
+            yield return null;
+        }
     }
-
-    public void LoadScene(string sceneName)
+    
+    IEnumerator AsynchronousLoad(int scene)
     {
-        StartCoroutine(AsynchronousLoad(sceneName));
+        loadingProgress = 0;
+    
+        yield return null;
+    
+        AsyncOperation ao = SceneManager.LoadSceneAsync(scene);
+        ao.allowSceneActivation = false;
+    
+        while (!ao.isDone)
+        {
+            loadingProgress = ao.progress + 0.1f;
+    
+            // Loading completed
+            if (ao.progress >= 0.9f)
+            {
+                ao.allowSceneActivation = true;
+            }
+    
+            yield return null;
+        }
     }
-
-    IEnumerator AsynchronousLoad(string scene)
+    
+    IEnumerator AsynchronousLoadWithFake(int scene)
     {
+        uiLoadingScreen.SetVisible(true);
         loadingProgress = 0;
         timeLoading = 0;
         yield return null;
-
+    
         AsyncOperation ao = SceneManager.LoadSceneAsync(scene);
         ao.allowSceneActivation = false;
-
+    
         while (!ao.isDone)
         {
             timeLoading += Time.deltaTime;
             loadingProgress = ao.progress + 0.1f;
             loadingProgress = loadingProgress * timeLoading / minTimeToLoad;
-
+    
+            // Loading completed
             if (loadingProgress >= 1)
             {
                 ao.allowSceneActivation = true;
-                if(SceneManager.GetActiveScene().name=="GameOver")
-                    GameManager.Instance.changingScene = false;
+                uiLoadingScreen.SetVisible(false);
             }
-
+    
             yield return null;
         }
-    }
+    }  
 }

@@ -5,10 +5,6 @@ using UnityEngine;
 public class FireballBehaviour : MonoBehaviour
 {
     float speed = 15f;
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
 
     // Update is called once per frame
     void Update()
@@ -23,14 +19,7 @@ public class FireballBehaviour : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D col)
     {
-        if(col.gameObject.name == "enemy_ship1")
-        {
-            col.gameObject.GetComponent<CommonShipBehaviour>().Death();
-        }
-        else if(col.gameObject.name == "GroupEnemy")
-        {
-            col.gameObject.GetComponent<GroupEnemyBehaviour>().Death();
-        }
-        Destroy(gameObject);
+        if(col.transform.tag!="Item")
+            Destroy(gameObject);
     }
 }

@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 4674792230898846519}
   - component: {fileID: 6203923789085059469}
   - component: {fileID: 1625690346090997442}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: enemy_ship1
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -70,7 +70,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 3
   m_Sprite: {fileID: 21300000, guid: 8a216a1c1be24324d836e87a1334594c, type: 3}
   m_Color: {r: 0.8962264, g: 0.4269758, b: 1, a: 1}
   m_FlipX: 0
@@ -96,7 +96,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flame: {fileID: 3496393777570386898, guid: 36c32a377671d1240a819a2ee46221d8, type: 3}
   hasItem: 0
-  a: {fileID: 0}
   item: {fileID: 8427864735633471460, guid: 76bcddd7a85b0af45b5650174081ae41, type: 3}
 --- !u!61 &6203923789085059469
 BoxCollider2D:

@@ -3,29 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIGameOverCanvas : MonoBehaviour
+public class UIGameOverCanvas : UIMenuCanvas
 {
-    Button playAgainButton;
-    Button quitButton;
-    public static Text score;
-    public static Text highScore;
-    public static bool playAgain = false;
+    public Text resultText;
+    public Text scoreText;
+    public Text highScoreText;
+
     void Start()
     {
-        playAgainButton = transform.Find("Panel").Find("PlayAgainButton").GetComponent<Button>();
-        quitButton = transform.Find("Panel").Find("QuitButton").GetComponent<Button>();
-        playAgainButton.onClick.AddListener(PlayAgain);
-        quitButton.onClick.AddListener(UIMenuCanvas.Quit);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    void PlayAgain()
-    {
-        playAgain = true;
+        resultText.text = GameManager.Get().GetResult();
+        scoreText.text = "Final Score: " + GameManager.Get().GetScore();
+        highScoreText.text = "Your HighScore Was: " + PlayerPrefs.GetInt("HighScore");
     }
 }

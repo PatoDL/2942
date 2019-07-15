@@ -4,67 +4,85 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviourSingleton<GameManager>
 {
     public int score;
-    GameObject canvas;
     float levelTimer = 0f;
-    Text scoreText;
-    bool gameOver = false;
-    public GameObject player;
-    public bool changingScene = false;
+    public float levelTimeLimit = 80f;
 
-    private static GameManager instance;
-    public static GameManager Instance
+    string result = "You Lost...";
+
+    void Start()
     {
-        get { return instance; }
+        EnemyBehaviour.AddScore += AddScore;
+        PlayerController.PlayerDeath += PlayerLoseResult;
+        PlayerController.PlayerDeath += UpdateHighScore;
+        PlayerController.ExplodeBomb += AddScore;
+        UIMenuCanvas.PlayGame += ResetScore;
     }
 
-    private void Awake()
+    void OnDestroy()
     {
-        if (instance != null)
+        PlayerController.PlayerDeath -= PlayerLoseResult;
+        PlayerController.PlayerDeath -= UpdateHighScore;
+        PlayerController.ExplodeBomb -= AddScore;
+        EnemyBehaviour.AddScore -= AddScore;
+        UIMenuCanvas.PlayGame -= ResetScore;
+    }
+
+    void ResetScore()
+    {
+        score = 0;
+    }
+
+    void UpdateHighScore()
+    {
+        if(PlayerPrefs.HasKey("HighScore"))
         {
-            Destroy(gameObject);
-            return;
+            if(PlayerPrefs.GetInt("HighScore")<score)
+            {
+                PlayerPrefs.SetInt("HighScore", score);
+            }
         }
-        instance = this;
-        DontDestroyOnLoad(gameObject);
+        else
+        {
+            PlayerPrefs.SetInt("HighScore", score);
+        }
     }
 
     void Update()
     {
-        if (SceneManager.GetActiveScene().name == "Level1" || SceneManager.GetActiveScene().name == "Level2")
+        if (LevelManager.Get().GetActualLevel() != 0 && LevelManager.Get().GetActualLevel() != 3)
         {
-            levelTimer += Time.deltaTime;
-            if (levelTimer >= 120f)
+            bool survivedTheLevel = levelTimer >= levelTimeLimit;
+            if (survivedTheLevel)
             {
+                result = "You Survived!";
+                LevelManager.Get().GoToNextLevel();
+                UpdateHighScore();
                 levelTimer = 0f;
-                if (SceneManager.GetActiveScene().name == "Level1")
-                    LoaderManager.Instance.LoadScene("Level2");
-                else
-                    SceneManager.LoadScene("GameOver");
             }
-        }
-
-        if (UIGameOverCanvas.playAgain)
-        {
-            UIGameOverCanvas.playAgain = false;
-            SceneManager.LoadScene("Level1");
+            levelTimer += Time.deltaTime;
         }
     }
 
-    public void setGameOver(bool g)
+    void PlayerLoseResult()
     {
-        gameOver = g;
-        if (gameOver)
-        {
-            gameOver = false;
-            SceneManager.LoadScene("GameOver");
-        }
+        result = "You Lost...";
     }
 
-    void Init()
+    void AddScore()
     {
-        
+        score += 50;
+    }
+
+    public int GetScore()
+    {
+        return score;
+    }
+
+    public string GetResult()
+    {
+        return result;
     }
 }
